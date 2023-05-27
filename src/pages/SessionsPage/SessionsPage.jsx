@@ -8,7 +8,6 @@ export default function SessionsPage() {
     const { idFilme } = useParams();
     const URL = `https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme}/showtimes`;
     let [movie, setMovie] = useState([]);
-    console.log(movie.days);
 
     useEffect(() => {
         const promise = axios.get(URL);
@@ -36,8 +35,8 @@ export default function SessionsPage() {
                         <ButtonsContainer>
                             {day.showtimes.map(hour => 
                                 {return (
-                                    <Link to={`/assentos/${hour.id}`}>
-                                        <button key={hour.id}>{hour.name}</button>
+                                    <Link to={`/assentos/${hour.id}`} key={hour.id}>
+                                        <button>{hour.name}</button>
                                     </Link>
                                 )})}
                         </ButtonsContainer>

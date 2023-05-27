@@ -1,51 +1,88 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
+import Seats from '../../components/Seats.jsx'
 
 export default function SeatsPage() {
+
+    const { idSessao } = useParams();
+    const navigate = useNavigate();
+
+    const URL = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`;
+    let [session, setSession] = useState([]);
+    let [name, setName] = useState('');
+    let [cpf, setCpf] = useState('');
+    let [ids, setIds] = useState([]);
+    
+    useEffect(()=>{
+        const promise = axios.get(URL);
+
+        promise.then(response => setSession(response.data));
+        promise.catch(erro => console.log(erro.response.data));
+    },[])
+
+    function buySeats(e){
+        e.preventDefault();
+
+        const URLPOST = 'https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many';
+        const objBuy = {ids, name, cpf};
+
+        const promisePost = axios.post(URLPOST, objBuy);
+
+        promisePost.then(response => navigate('/sucesso', {state: objBuy}));
+        promisePost.catch(erro => console.log(erro.response.data))
+    }
+
+    
+
+
+    if( session.length ===0 ){
+        return (
+            <div style ={{marginTop:'80px', fontSize:'36px'}}>
+                Carregando...
+            </div>
+        )
+    }
 
     return (
         <PageContainer>
             Selecione o(s) assento(s)
 
-            <SeatsContainer>
-                <SeatItem>01</SeatItem>
-                <SeatItem>02</SeatItem>
-                <SeatItem>03</SeatItem>
-                <SeatItem>04</SeatItem>
-                <SeatItem>05</SeatItem>
-            </SeatsContainer>
+            <Seats session={session} ids={ids} setIds={setIds}/>
 
             <CaptionContainer>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle style={{backgroundColor:'#1AAE9E', border:'1px solid #0E7D71'}}/>
                     Selecionado
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle style={{backgroundColor:'#C3CFD9', border:'1px solid #7B8B99'}}/>
                     Disponível
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle style={{backgroundColor:'#FBE192', border:'1px solid #F7C52B'}}/>
                     Indisponível
                 </CaptionItem>
             </CaptionContainer>
 
-            <FormContainer>
-                Nome do Comprador:
-                <input placeholder="Digite seu nome..." />
+            <FormContainer onSubmit={buySeats}>
+                <label>Nome do Comprador:</label>
+                <input type='text' placeholder="Digite seu nome..." required value={name} onChange={(e) => setName(e.target.value)} />
 
-                CPF do Comprador:
-                <input placeholder="Digite seu CPF..." />
+                <label>CPF do Comprador:</label>
+                <input type='text' placeholder="Digite seu CPF..." required value={cpf} onChange={(e) => setCpf(e.target.value)}/>
 
-                <button>Reservar Assento(s)</button>
+                <button type="submit">Reservar Assento(s)</button>
             </FormContainer>
 
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={session.movie.posterURL} alt="poster" />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
-                    <p>Sexta - 14h00</p>
+                    <p>{session.movie.title}</p>
+                    <p>{session.day.weekday} - {session.name}</p>
                 </div>
             </FooterContainer>
 
@@ -65,16 +102,8 @@ const PageContainer = styled.div`
     padding-bottom: 120px;
     padding-top: 70px;
 `
-const SeatsContainer = styled.div`
-    width: 330px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-`
-const FormContainer = styled.div`
+
+const FormContainer = styled.form`
     width: calc(100vw - 40px); 
     display: flex;
     flex-direction: column;
@@ -112,19 +141,7 @@ const CaptionItem = styled.div`
     align-items: center;
     font-size: 12px;
 `
-const SeatItem = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
-    height: 25px;
-    width: 25px;
-    border-radius: 25px;
-    font-family: 'Roboto';
-    font-size: 11px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 5px 3px;
-`
+
 const FooterContainer = styled.div`
     width: 100%;
     height: 120px;
