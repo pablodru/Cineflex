@@ -14,6 +14,7 @@ export default function SeatsPage() {
     let [name, setName] = useState('');
     let [cpf, setCpf] = useState('');
     let [ids, setIds] = useState([]);
+    let [idSuccess, setIdSuccess] = useState([]);
     
     useEffect(()=>{
         const promise = axios.get(URL);
@@ -28,9 +29,11 @@ export default function SeatsPage() {
         const URLPOST = 'https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many';
         const objBuy = {ids, name, cpf};
 
+        const objSuccess = { idSuccess, name, cpf, title:session.movie.title, hour: session.name, date: session.day.date};
+
         const promisePost = axios.post(URLPOST, objBuy);
 
-        promisePost.then(response => navigate('/sucesso', {state: objBuy}));
+        promisePost.then(response => navigate('/sucesso', {state: objSuccess}));
         promisePost.catch(erro => console.log(erro.response.data))
     }
 
@@ -49,7 +52,7 @@ export default function SeatsPage() {
         <PageContainer>
             Selecione o(s) assento(s)
 
-            <Seats session={session} ids={ids} setIds={setIds}/>
+            <Seats session={session} ids={ids} setIds={setIds} idSuccess={idSuccess} setIdSuccess={setIdSuccess} />
 
             <CaptionContainer>
                 <CaptionItem>
@@ -68,15 +71,15 @@ export default function SeatsPage() {
 
             <FormContainer onSubmit={buySeats}>
                 <label>Nome do Comprador:</label>
-                <input type='text' placeholder="Digite seu nome..." required value={name} onChange={(e) => setName(e.target.value)} />
+                <input type='text' placeholder="Digite seu nome..." required value={name} onChange={(e) => setName(e.target.value)} data-test='client-name'/>
 
                 <label>CPF do Comprador:</label>
-                <input type='text' placeholder="Digite seu CPF..." required value={cpf} onChange={(e) => setCpf(e.target.value)}/>
+                <input type='text' placeholder="Digite seu CPF..." required value={cpf} onChange={(e) => setCpf(e.target.value)} data-test='client-cpf' />
 
-                <button type="submit">Reservar Assento(s)</button>
+                <button type="submit" data-test='book-seat-btn' >Reservar Assento(s)</button>
             </FormContainer>
 
-            <FooterContainer>
+            <FooterContainer data-test='footer' >
                 <div>
                     <img src={session.movie.posterURL} alt="poster" />
                 </div>

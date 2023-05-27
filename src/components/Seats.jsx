@@ -1,10 +1,11 @@
 import styled from "styled-components";
 
-export default function Seats({session, ids, setIds}){
+export default function Seats({session, ids, setIds, idSuccess, setIdSuccess}){
 
-    function chooseSeat(id, isAvailable){
+    function chooseSeat(id, isAvailable, name){
         if(!ids.includes(id) && isAvailable){
             setIds([...ids, id]);
+            setIdSuccess([...idSuccess, name])
         } else {
             setIds(ids.filter(i => {
                 if(i === id) return false
@@ -17,7 +18,7 @@ export default function Seats({session, ids, setIds}){
         <SeatsContainer>
             {session.seats.map(seat => {
                 return (
-                    <SeatItem key={seat.id} isAvailable={seat.isAvailable} id={seat.id} ids={ids} onClick={() => chooseSeat(seat.id, seat.isAvailable)} > {seat.name} </SeatItem>
+                    <SeatItem data-test='seat' key={seat.id} isAvailable={seat.isAvailable} id={seat.id} ids={ids} onClick={() => chooseSeat(seat.id, seat.isAvailable, seat.name)} > {seat.name} </SeatItem>
                 )
             })}
         </SeatsContainer>
