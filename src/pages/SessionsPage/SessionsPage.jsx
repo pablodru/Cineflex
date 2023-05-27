@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom"
-import styled from "styled-components"
+import styled from "styled-components";
+import Back from '../../components/Back';
 
 export default function SessionsPage() {
     
@@ -53,6 +54,8 @@ export default function SessionsPage() {
                     <p> { movie.title } </p>
                 </div>
             </FooterContainer>
+
+            <Back />
 
         </PageContainer>
     )

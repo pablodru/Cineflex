@@ -2,7 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
-import Seats from '../../components/Seats.jsx'
+import Seats from '../../components/Seats.jsx';
+import Back from '../../components/Back';
 
 export default function SeatsPage() {
 
@@ -40,7 +41,7 @@ export default function SeatsPage() {
     
 
 
-    if( session.length ===0 ){
+    if( session.length === 0 ){
         return (
             <div style ={{marginTop:'80px', fontSize:'36px'}}>
                 Carregando...
@@ -89,6 +90,7 @@ export default function SeatsPage() {
                 </div>
             </FooterContainer>
 
+            <Back />
         </PageContainer>
     )
 }

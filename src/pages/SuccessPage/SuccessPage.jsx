@@ -1,5 +1,6 @@
-import { useLocation, useNavigate } from "react-router-dom"
-import styled from "styled-components"
+import { useLocation, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Back from '../../components/Back';
 
 export default function SuccessPage() {
 
@@ -35,6 +36,8 @@ export default function SuccessPage() {
             </TextContainer>
 
             <button onClick={() => navigate('/')} data-test='go-home-btn' >Voltar para Home</button>
+
+            <Back />
         </PageContainer>
     )
 }

@@ -6,11 +6,13 @@ export default function Seats({session, ids, setIds, idSuccess, setIdSuccess}){
         if(!ids.includes(id) && isAvailable){
             setIds([...ids, id]);
             setIdSuccess([...idSuccess, name])
-        } else {
+        } else if(ids.includes(id)){
             setIds(ids.filter(i => {
                 if(i === id) return false
                 else return true
             }))
+        } else if(!isAvailable){
+            alert("Esse assento não está disponível")
         }
     }
 
