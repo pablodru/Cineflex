@@ -5,6 +5,7 @@ import SessionsPage from "./pages/SessionsPage/SessionsPage";
 import SuccessPage from "./pages/SuccessPage/SuccessPage";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
+import Loading from "./components/Loading";
 
 export default function App() {
 
@@ -16,7 +17,7 @@ export default function App() {
             <BrowserRouter>
 
                 <NavContainer>CINEFLEX</NavContainer>
-
+                
                 <Routes>
                     <Route path='/' element={<HomePage />} />
                     
